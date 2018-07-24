@@ -105,11 +105,11 @@ class VoteService:
 
         # Clean up the election state
         VoteBallot.objects.all().delete()
+        for vote_status in VoteStatus.objects.all():
+            vote_status.has_voted = False
+            vote_status.save()
         if not success:
             SiteSettingService.set_voting_applications_open()
-            for vote_status in VoteStatus.objects.all():
-                vote_status.has_voted = False
-                vote_status.save()
 
         return success
 
